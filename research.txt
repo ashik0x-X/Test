@@ -1,0 +1,236 @@
+# NPM Supply Chain Attack Detection System in python
+
+## Overview
+
+This project presents a research-grade, modular pipeline for detecting supply chain attacks in NPM packages using a combination of static code analysis, metadata analysis, dependency graph analysis, and advanced feature fusion techniques.
+
+The system leverages machine learning with LightGBM to classify packages as malicious or benign.
+
+---
+
+## Objective
+
+The goal of this project is to design and implement a scalable, reproducible, and extensible detection system capable of identifying:
+
+* Malicious package injections
+* Obfuscated code execution
+* Suspicious dependency chains
+* Zero-day supply chain attack patterns
+
+---
+
+## Pipeline Architecture
+
+[1] Data Ingestion
+↓
+[2] Data Preprocessing
+↓
+[3] Static Analysis
+↓
+[4] Metadata Analysis
+↓
+[5] Dependency Graph Analysis
+↓
+[6] Feature Engineering
+↓
+[7] Feature Fusion
+↓
+[8] Model Training (LightGBM)
+↓
+[9] Evaluation
+↓
+[10] Reporting & Output
+
+Each stage is independent, reusable, testable, and scalable.
+
+---
+
+## Project Structure
+
+npm_supply_chain_detector/
+
+* data/
+
+  * raw/
+  * processed/
+  * external/
+
+* src/
+
+  * ingestion/
+  * preprocessing/
+  * static_analysis/
+  * metadata_analysis/
+  * graph_analysis/
+  * feature_engineering/
+  * fusion/
+  * model/
+  * evaluation/
+  * utils/
+  * pipeline/
+
+* experiments/
+
+* notebooks/
+
+* models/
+
+* reports/
+
+  * figures/
+
+* requirements.txt
+
+* README.md
+
+* main.py
+
+---
+
+## Module Description
+
+### Data Ingestion
+
+* Collects NPM packages via API and datasets
+* Extracts source code, package.json, and dependency trees
+
+### Static Analysis
+
+* Detects dangerous APIs (eval, child_process, etc.)
+* Identifies obfuscation patterns
+* Performs entropy and suspicious logic analysis
+
+### Metadata Analysis
+
+* Extracts author reputation
+* Detects version anomalies
+* Analyzes install scripts and update behavior
+
+### Dependency Graph Analysis
+
+* Builds dependency graphs
+* Extracts centrality, depth, and anomaly features
+
+### Feature Engineering
+
+* Normalization and encoding
+* Feature selection
+* Missing value handling
+
+### Feature Fusion
+
+* Early fusion (concatenation)
+* Late fusion (ensemble)
+* Hybrid fusion strategies
+
+### Model Training
+
+* Uses LightGBM
+* Includes cross-validation and hyperparameter tuning
+* Handles imbalanced datasets (SMOTE)
+
+### Evaluation Metrics
+
+* Accuracy
+* Precision
+* Recall
+* F1-score
+* ROC-AUC
+* False Positive Rate
+
+### Reporting & Output
+
+* Trained model files
+* Evaluation reports
+* Feature importance (SHAP)
+* Logs
+
+---
+
+## How to Run
+
+1. Clone Repository
+   git clone <repo_url>
+   cd npm_supply_chain_detector
+
+2. Install Dependencies
+   pip install -r requirements.txt
+
+3. Run Full Pipeline
+   python main.py --stage full
+
+4. Run Specific Stage
+   python main.py --stage train
+   python main.py --stage evaluate
+
+---
+
+## Configuration
+
+All configurations should be defined in:
+src/utils/config.py
+
+Includes dataset paths, model parameters, and feature settings.
+
+---
+
+## Advanced Features
+
+* Zero-day attack detection
+* Incremental learning
+* Feature explainability (SHAP)
+* Graph-based anomaly detection
+* Modular experimentation
+
+---
+
+## Research Contributions
+
+* Hybrid feature fusion for supply chain detection
+* Integration of static, metadata, and graph signals
+* Scalable detection framework for NPM ecosystem
+* Extensible research pipeline
+
+---
+
+## Dependencies
+
+* Python 3.9+
+* pandas
+* numpy
+* scikit-learn
+* LightGBM
+* networkx
+* matplotlib
+
+---
+
+## Experiments
+
+Stored in:
+experiments/
+
+Includes model comparisons, fusion evaluations, and tuning results.
+
+---
+
+## Use Cases
+
+* Malware detection in open-source ecosystems
+* Supply chain security research
+* Automated package vetting
+* Academic research and publications
+
+---
+
+## Notes
+
+* Ensure reproducibility using fixed seeds
+* Use properly labeled datasets
+* Monitor False Positive Rate carefully
+
+---
+
+## License
+
+This project is intended for research and educational purposes only.
