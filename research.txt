@@ -1,236 +1,201 @@
-# NPM Supply Chain Attack Detection System in python
+You are a senior machine learning engineer, data pipeline architect, and cybersecurity researcher.
 
-## Overview
-
-This project presents a research-grade, modular pipeline for detecting supply chain attacks in NPM packages using a combination of static code analysis, metadata analysis, dependency graph analysis, and advanced feature fusion techniques.
-
-The system leverages machine learning with LightGBM to classify packages as malicious or benign.
+Your task is to design and implement a clean, scalable, production-ready machine learning system for detecting malicious NPM (Node.js) packages in a software supply chain security environment.
 
 ---
 
-## Objective
+# 🎯 PROJECT OBJECTIVE
 
-The goal of this project is to design and implement a scalable, reproducible, and extensible detection system capable of identifying:
+Build a fully modular ML system that:
 
-* Malicious package injections
-* Obfuscated code execution
-* Suspicious dependency chains
-* Zero-day supply chain attack patterns
-
----
-
-## Pipeline Architecture
-
-[1] Data Ingestion
-↓
-[2] Data Preprocessing
-↓
-[3] Static Analysis
-↓
-[4] Metadata Analysis
-↓
-[5] Dependency Graph Analysis
-↓
-[6] Feature Engineering
-↓
-[7] Feature Fusion
-↓
-[8] Model Training (LightGBM)
-↓
-[9] Evaluation
-↓
-[10] Reporting & Output
-
-Each stage is independent, reusable, testable, and scalable.
+- Detects malicious vs benign NPM packages
+- Processes large-scale datasets (10K–100K+ packages)
+- Extracts static + metadata + security features
+- Uses an optimized pipeline architecture (no redundancy)
+- Trains multiple ML models
+- Uses ensemble/fusion methods for final prediction
+- Supports fast inference and scalable design
 
 ---
 
-## Project Structure
+# 📦 INPUT DATA
 
-npm_supply_chain_detector/
+Raw NPM package dataset containing:
 
-* data/
+- package.json
+- JavaScript source files
+- dependency trees
+- install scripts (preinstall/postinstall)
 
-  * raw/
-  * processed/
-  * external/
-
-* src/
-
-  * ingestion/
-  * preprocessing/
-  * static_analysis/
-  * metadata_analysis/
-  * graph_analysis/
-  * feature_engineering/
-  * fusion/
-  * model/
-  * evaluation/
-  * utils/
-  * pipeline/
-
-* experiments/
-
-* notebooks/
-
-* models/
-
-* reports/
-
-  * figures/
-
-* requirements.txt
-
-* README.md
-
-* main.py
+Labels:
+- 0 → benign package
+- 1 → malicious package
 
 ---
 
-## Module Description
+# ⚙️ SYSTEM DESIGN REQUIREMENTS
 
-### Data Ingestion
+## 1. CLEAN PIPELINE ARCHITECTURE
 
-* Collects NPM packages via API and datasets
-* Extracts source code, package.json, and dependency trees
+The system MUST follow a strict modular pipeline:
 
-### Static Analysis
+### Stage 1: Feature Extraction
+- Extract features once only (no repeated scanning)
+- Scan only relevant files (.js, package.json, scripts)
+- Extract security-related signals:
+  - dependency count
+  - install scripts presence
+  - suspicious API usage (eval, exec, child_process, fs, net, http)
+  - file structure complexity
+  - lightweight entropy / obfuscation indicators
 
-* Detects dangerous APIs (eval, child_process, etc.)
-* Identifies obfuscation patterns
-* Performs entropy and suspicious logic analysis
+### Stage 2: Dataset Builder
+- Convert extracted features into structured tabular dataset
+- Store dataset in optimized format (Parquet preferred)
+- Support incremental batch processing
 
-### Metadata Analysis
-
-* Extracts author reputation
-* Detects version anomalies
-* Analyzes install scripts and update behavior
-
-### Dependency Graph Analysis
-
-* Builds dependency graphs
-* Extracts centrality, depth, and anomaly features
-
-### Feature Engineering
-
-* Normalization and encoding
-* Feature selection
-* Missing value handling
-
-### Feature Fusion
-
-* Early fusion (concatenation)
-* Late fusion (ensemble)
-* Hybrid fusion strategies
-
-### Model Training
-
-* Uses LightGBM
-* Includes cross-validation and hyperparameter tuning
-* Handles imbalanced datasets (SMOTE)
-
-### Evaluation Metrics
-
-* Accuracy
-* Precision
-* Recall
-* F1-score
-* ROC-AUC
-* False Positive Rate
-
-### Reporting & Output
-
-* Trained model files
-* Evaluation reports
-* Feature importance (SHAP)
-* Logs
+### Stage 3: Preprocessing
+- Handle missing values
+- Normalize numeric features if required
+- Remove constant/low-variance features
+- Ensure reproducibility
 
 ---
 
-## How to Run
+# 🤖 2. MULTI-MODEL TRAINING SYSTEM
 
-1. Clone Repository
-   git clone <repo_url>
-   cd npm_supply_chain_detector
+Train multiple independent models:
 
-2. Install Dependencies
-   pip install -r requirements.txt
+### Required models:
+- LightGBM
+- XGBoost
+- Random Forest
+- Logistic Regression (baseline)
 
-3. Run Full Pipeline
-   python main.py --stage full
+Each model must:
+- Be trained independently
+- Be evaluated separately
+- Output probability predictions
+- Be saved individually
 
-4. Run Specific Stage
-   python main.py --stage train
-   python main.py --stage evaluate
-
----
-
-## Configuration
-
-All configurations should be defined in:
-src/utils/config.py
-
-Includes dataset paths, model parameters, and feature settings.
+Metrics required:
+- precision
+- recall
+- F1-score
+- confusion matrix
 
 ---
 
-## Advanced Features
+# 🔥 3. ENSEMBLE / FUSION SYSTEM (CRITICAL)
 
-* Zero-day attack detection
-* Incremental learning
-* Feature explainability (SHAP)
-* Graph-based anomaly detection
-* Modular experimentation
+Implement a fusion layer that combines all model outputs.
 
----
+## REQUIRED METHODS:
 
-## Research Contributions
+### Option A: Soft Voting (Preferred)
+- Average probability outputs from all models
+- Final prediction = weighted or equal average
 
-* Hybrid feature fusion for supply chain detection
-* Integration of static, metadata, and graph signals
-* Scalable detection framework for NPM ecosystem
-* Extensible research pipeline
+### Option B: Weighted Voting
+- Assign weights based on model performance
 
----
+Example:
+- LightGBM = 0.4
+- XGBoost = 0.3
+- Random Forest = 0.2
+- Logistic Regression = 0.1
 
-## Dependencies
-
-* Python 3.9+
-* pandas
-* numpy
-* scikit-learn
-* LightGBM
-* networkx
-* matplotlib
+### Option C: Stacking (Advanced)
+- Train a meta-model using predictions of base models
+- Meta-model outputs final classification
 
 ---
 
-## Experiments
+# ⚡ 4. PERFORMANCE REQUIREMENTS
 
-Stored in:
-experiments/
-
-Includes model comparisons, fusion evaluations, and tuning results.
-
----
-
-## Use Cases
-
-* Malware detection in open-source ecosystems
-* Supply chain security research
-* Automated package vetting
-* Academic research and publications
+- Feature extraction must run only once (cached)
+- No redundant computation in training
+- Must support batch processing for large datasets
+- Must scale to 100K+ packages efficiently
+- Must use multiprocessing where possible
+- Must minimize I/O overhead
 
 ---
 
-## Notes
+# 🔮 5. INFERENCE SYSTEM
 
-* Ensure reproducibility using fixed seeds
-* Use properly labeled datasets
-* Monitor False Positive Rate carefully
+The system must:
+
+- Load all trained models
+- Generate predictions from each model
+- Apply ensemble fusion logic
+- Output:
+  - final classification (benign/malicious)
+  - probability score
+  - model-wise confidence breakdown
+
+Must be optimized for fast inference.
 
 ---
 
-## License
+# 🧱 6. REQUIRED PROJECT STRUCTURE
 
-This project is intended for research and educational purposes only.
+npm_detector/
+  src/
+    extract/
+    preprocess/
+    models/
+    ensemble/
+    train/
+    predict/
+    pipeline/
+    utils/
+  data/
+    raw/
+    processed/
+    cache/
+  models/
+    base_models/
+    ensemble/
+  config.py
+  main.py
+
+---
+
+# 🧠 ENGINEERING CONSTRAINTS
+
+- No monolithic scripts
+- No repeated feature extraction
+- No GPU dependency unless necessary
+- Fully modular and reusable architecture
+- Clean, production-grade Python code
+- Fully reproducible pipeline
+
+---
+
+# 📊 OUTPUT REQUIREMENTS
+
+Return:
+
+1. Full system architecture explanation
+2. Complete Python implementation for all modules
+3. Feature extraction pipeline design
+4. Training pipeline for all models
+5. Ensemble/fusion implementation (voting + stacking)
+6. Inference system design
+7. Performance optimization strategy
+8. Recommended best ensemble strategy for NPM malware detection
+
+---
+
+# 🔥 BONUS (HIGH VALUE FOR RESEARCH)
+
+Include:
+- Feature importance analysis
+- Logging system for pipeline stages
+- Dataset caching mechanism
+- Execution time profiling per stage
+- Suggestions for Q1 journal publication contribution
+- Scalability upgrade path (100K → 1M packages)
+
+Now generate the complete system implementation.
