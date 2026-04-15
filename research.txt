@@ -4,6 +4,10 @@ Your task is to design and implement a clean, scalable, production-ready machine
 
 ---
 
+Supporting help : the main.py file is for help to understand the structure for detection pattern and you can use own  deetction advanced pattern  structure 
+
+
+
 # 🎯 PROJECT OBJECTIVE
 
 Build a fully modular ML system that:
